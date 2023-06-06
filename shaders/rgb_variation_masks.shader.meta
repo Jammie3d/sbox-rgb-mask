@@ -1,0 +1,27 @@
+{
+  "publish": {
+    "Enabled": true,
+    "ProjectConfig": {
+      "Title": "RGB Variation Masks",
+      "Type": "shader",
+      "Org": "jammie",
+      "Ident": "rgb_variation_masks",
+      "Tags": null,
+      "Schema": 0,
+      "HasAssets": false,
+      "AssetsPath": null,
+      "Resources": null,
+      "MenuResources": null,
+      "HasCode": false,
+      "CodePath": null,
+      "PackageReferences": null,
+      "EditorReferences": null,
+      "Metadata": {
+        "SingleAssetSource": "shaders/rgb_variation_masks.shader",
+        "Summary": "A shader for blending up to 3 tileable materials on one model.",
+        "Description": "",
+        "Public": false
+      }
+    }
+  }
+}
