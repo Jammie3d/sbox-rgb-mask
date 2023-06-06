@@ -16,3 +16,7 @@ code/Properties/*
 *.*_c
 *.los
 *.vpk
+
+# Misc
+
+RawContent/*
