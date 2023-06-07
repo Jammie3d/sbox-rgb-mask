@@ -6,7 +6,7 @@
       "Type": "shader",
       "Org": "jammie",
       "Ident": "rgb_variation_masks",
-      "Tags": null,
+      "Tags": "shader rgb blend environment packed detail",
       "Schema": 0,
       "HasAssets": false,
       "AssetsPath": null,
