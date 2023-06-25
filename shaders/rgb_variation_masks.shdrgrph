@@ -31,12 +31,16 @@
       "DefaultRoughness": 1,
       "DefaultMetalness": 0,
       "DefaultAmbientOcclusion": 1,
+      "PositionOffset": {},
       "Identifier": "0",
       "Position": "1072,-448"
     },
     {
       "_class": "TextureSampler",
-      "Coords": {},
+      "Coords": {
+        "Identifier": "125",
+        "Output": "Result"
+      },
       "Texture": null,
       "Sampler": {},
       "UI": {
@@ -50,7 +54,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "1",
-      "Position": "-2480,224"
+      "Position": "-2320,224"
     },
     {
       "_class": "Lerp",
@@ -132,7 +136,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "5",
-      "Position": "-2032,-288"
+      "Position": "-2048,-288"
     },
     {
       "_class": "TextureSampler",
@@ -154,7 +158,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "6",
-      "Position": "-2080,736"
+      "Position": "-2256,736"
     },
     {
       "_class": "TextureSampler",
@@ -175,7 +179,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "7",
-      "Position": "-2032,-688"
+      "Position": "-2048,-688"
     },
     {
       "_class": "TextureSampler",
@@ -197,7 +201,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "8",
-      "Position": "-640,720"
+      "Position": "-448,720"
     },
     {
       "_class": "Lerp",
@@ -256,7 +260,7 @@
         }
       },
       "Identifier": "12",
-      "Position": "-2080,928"
+      "Position": "-2256,928"
     },
     {
       "_class": "Float4",
@@ -288,47 +292,44 @@
         }
       },
       "Identifier": "14",
-      "Position": "-640,928"
+      "Position": "-448,928"
     },
     {
       "_class": "CommentNode",
-      "Size": "224,256",
+      "Size": "576,272",
       "Color": "White",
       "Description": "",
       "Title": "Unique Textures",
-      "Layer": 8,
+      "Layer": 6,
       "Identifier": "15",
-      "Position": "-2512,176"
+      "Position": "-2704,160"
     },
     {
       "_class": "CommentNode",
-      "Size": "720,992",
+      "Size": "896,992",
       "Color": "Green",
       "Description": "",
       "Title": "Green Channel",
-      "Layer": 8,
+      "Layer": 2,
       "Identifier": "16",
-      "Position": "-1728,528"
+      "Position": "-1904,528"
     },
     {
       "_class": "CommentNode",
-      "Size": "720,992",
+      "Size": "912,992",
       "Color": "Blue",
       "Description": "",
       "Title": "Blue Channel",
-      "Layer": 8,
+      "Layer": 1,
       "Identifier": "17",
       "Position": "-992,528"
     },
     {
-      "_class": "CommentNode",
-      "Size": "560,640",
-      "Color": "Purple",
-      "Description": "",
-      "Title": "Base Material",
-      "Layer": 6,
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": false,
+      "Tiling": "1,1",
       "Identifier": "18",
-      "Position": "-2368,-736"
+      "Position": "-2688,272"
     },
     {
       "_class": "Multiply",
@@ -343,7 +344,7 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "19",
-      "Position": "-1856,592"
+      "Position": "-2032,592"
     },
     {
       "_class": "Float",
@@ -359,17 +360,17 @@
         }
       },
       "Identifier": "20",
-      "Position": "-2080,656"
+      "Position": "-2256,656"
     },
     {
       "_class": "CommentNode",
-      "Size": "784,992",
+      "Size": "976,992",
       "Color": "Red",
       "Description": "",
       "Title": "Red Channel",
-      "Layer": 7,
+      "Layer": 5,
       "Identifier": "21",
-      "Position": "-2528,528"
+      "Position": "-2896,528"
     },
     {
       "_class": "Float",
@@ -416,7 +417,7 @@
         }
       },
       "Identifier": "24",
-      "Position": "-640,640"
+      "Position": "-448,640"
     },
     {
       "_class": "Multiply",
@@ -431,7 +432,7 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "25",
-      "Position": "-416,576"
+      "Position": "-224,576"
     },
     {
       "_class": "Saturate",
@@ -480,7 +481,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "29",
-      "Position": "-2032,-480"
+      "Position": "-2048,-480"
     },
     {
       "_class": "Lerp",
@@ -583,7 +584,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "36",
-      "Position": "-2080,1104"
+      "Position": "-2256,1104"
     },
     {
       "_class": "TextureSampler",
@@ -627,7 +628,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "38",
-      "Position": "-640,1104"
+      "Position": "-448,1104"
     },
     {
       "_class": "Lerp",
@@ -750,7 +751,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "46",
-      "Position": "-640,1296"
+      "Position": "-448,1296"
     },
     {
       "_class": "Saturate",
@@ -774,7 +775,7 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "48",
-      "Position": "-1856,816"
+      "Position": "-2032,816"
     },
     {
       "_class": "Multiply",
@@ -789,7 +790,7 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "49",
-      "Position": "-416,816"
+      "Position": "-224,816"
     },
     {
       "_class": "TextureSampler",
@@ -813,7 +814,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "50",
-      "Position": "-2080,1296"
+      "Position": "-2256,1296"
     },
     {
       "_class": "TextureSampler",
@@ -1015,12 +1016,12 @@
       "UseSecondaryCoord": false,
       "Tiling": "1,1",
       "Identifier": "65",
-      "Position": "-2352,-496"
+      "Position": "-2544,-528"
     },
     {
       "_class": "Multiply",
       "A": {
-        "Identifier": "65",
+        "Identifier": "115",
         "Output": "Result"
       },
       "B": {
@@ -1030,7 +1031,7 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "66",
-      "Position": "-2144,-480"
+      "Position": "-2160,-480"
     },
     {
       "_class": "Float2",
@@ -1045,12 +1046,12 @@
         }
       },
       "Identifier": "67",
-      "Position": "-2352,-432"
+      "Position": "-2368,-432"
     },
     {
       "_class": "Multiply",
       "A": {
-        "Identifier": "69",
+        "Identifier": "112",
         "Output": "Result"
       },
       "B": {
@@ -1060,19 +1061,19 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "68",
-      "Position": "-2304,1104"
+      "Position": "-2480,1104"
     },
     {
       "_class": "TextureCoord",
       "UseSecondaryCoord": false,
       "Tiling": "1,1",
       "Identifier": "69",
-      "Position": "-2512,1088"
+      "Position": "-2880,1056"
     },
     {
       "_class": "Multiply",
       "A": {
-        "Identifier": "73",
+        "Identifier": "113",
         "Output": "Result"
       },
       "B": {
@@ -1087,7 +1088,7 @@
     {
       "_class": "Float2",
       "Value": "1,1",
-      "Name": "Red  Tiling",
+      "Name": "Red Tiling",
       "IsAttribute": false,
       "UI": {
         "Priority": 5,
@@ -1097,7 +1098,7 @@
         }
       },
       "Identifier": "71",
-      "Position": "-2512,1152"
+      "Position": "-2688,1152"
     },
     {
       "_class": "Float2",
@@ -1112,19 +1113,19 @@
         }
       },
       "Identifier": "72",
-      "Position": "-1712,1136"
+      "Position": "-1712,1152"
     },
     {
       "_class": "TextureCoord",
       "UseSecondaryCoord": false,
       "Tiling": "1,1",
       "Identifier": "73",
-      "Position": "-1712,1072"
+      "Position": "-1888,1056"
     },
     {
       "_class": "Multiply",
       "A": {
-        "Identifier": "76",
+        "Identifier": "114",
         "Output": "Result"
       },
       "B": {
@@ -1134,7 +1135,7 @@
       "DefaultA": 0,
       "DefaultB": 1,
       "Identifier": "74",
-      "Position": "-768,1104"
+      "Position": "-576,1104"
     },
     {
       "_class": "Float2",
@@ -1149,14 +1150,14 @@
         }
       },
       "Identifier": "75",
-      "Position": "-976,1152"
+      "Position": "-784,1152"
     },
     {
       "_class": "TextureCoord",
       "UseSecondaryCoord": false,
       "Tiling": "1,1",
       "Identifier": "76",
-      "Position": "-976,1088"
+      "Position": "-976,1056"
     },
     {
       "_class": "CommentNode",
@@ -1224,7 +1225,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 10,
+        "Priority": 11,
         "PrimaryGroup": {
           "Name": "Red Channel",
           "Priority": 2
@@ -1324,7 +1325,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 9,
+        "Priority": 10,
         "PrimaryGroup": {
           "Name": "Red Channel",
           "Priority": 2
@@ -1349,7 +1350,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 8,
+        "Priority": 9,
         "PrimaryGroup": {
           "Name": "Red Channel",
           "Priority": 2
@@ -1374,7 +1375,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 7,
+        "Priority": 8,
         "PrimaryGroup": {
           "Name": "Red Channel",
           "Priority": 2
@@ -1399,7 +1400,7 @@
       "Operator": "Equal",
       "Enabled": true,
       "UI": {
-        "Priority": 6,
+        "Priority": 7,
         "PrimaryGroup": {
           "Name": "Red Channel",
           "Priority": 2
@@ -1499,7 +1500,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 10,
+        "Priority": 11,
         "PrimaryGroup": {
           "Name": "Green Channel",
           "Priority": 3
@@ -1524,7 +1525,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 9,
+        "Priority": 10,
         "PrimaryGroup": {
           "Name": "Green Channel",
           "Priority": 3
@@ -1549,7 +1550,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 8,
+        "Priority": 9,
         "PrimaryGroup": {
           "Name": "Green Channel",
           "Priority": 3
@@ -1574,7 +1575,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 7,
+        "Priority": 8,
         "PrimaryGroup": {
           "Name": "Green Channel",
           "Priority": 3
@@ -1599,7 +1600,7 @@
       "Operator": "Equal",
       "Enabled": true,
       "UI": {
-        "Priority": 6,
+        "Priority": 7,
         "PrimaryGroup": {
           "Name": "Green Channel",
           "Priority": 3
@@ -1699,7 +1700,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 10,
+        "Priority": 11,
         "PrimaryGroup": {
           "Name": "Blue Channel",
           "Priority": 4
@@ -1724,7 +1725,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 9,
+        "Priority": 10,
         "PrimaryGroup": {
           "Name": "Blue Channel",
           "Priority": 4
@@ -1749,7 +1750,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 8,
+        "Priority": 9,
         "PrimaryGroup": {
           "Name": "Blue Channel",
           "Priority": 4
@@ -1774,7 +1775,7 @@
       "Operator": "Equal",
       "Enabled": false,
       "UI": {
-        "Priority": 7,
+        "Priority": 8,
         "PrimaryGroup": {
           "Name": "Blue Channel",
           "Priority": 4
@@ -1799,7 +1800,7 @@
       "Operator": "Equal",
       "Enabled": true,
       "UI": {
-        "Priority": 6,
+        "Priority": 7,
         "PrimaryGroup": {
           "Name": "Blue Channel",
           "Priority": 4
@@ -1807,6 +1808,214 @@
       },
       "Identifier": "111",
       "Position": "272,-768"
+    },
+    {
+      "_class": "Branch",
+      "True": {
+        "Identifier": "116",
+        "Output": "Result"
+      },
+      "False": {
+        "Identifier": "69",
+        "Output": "Result"
+      },
+      "A": {},
+      "B": {},
+      "Name": "Red Use Secondary Coord",
+      "Operator": "Equal",
+      "Enabled": false,
+      "UI": {
+        "Priority": 6,
+        "PrimaryGroup": {
+          "Name": "Red Channel",
+          "Priority": 2
+        }
+      },
+      "Identifier": "112",
+      "Position": "-2688,1008"
+    },
+    {
+      "_class": "Branch",
+      "True": {
+        "Identifier": "117",
+        "Output": "Result"
+      },
+      "False": {
+        "Identifier": "73",
+        "Output": "Result"
+      },
+      "A": {},
+      "B": {},
+      "Name": "Green Use Secondary Coord",
+      "Operator": "Equal",
+      "Enabled": false,
+      "UI": {
+        "Priority": 6,
+        "PrimaryGroup": {
+          "Name": "Green Channel",
+          "Priority": 3
+        }
+      },
+      "Identifier": "113",
+      "Position": "-1712,1008"
+    },
+    {
+      "_class": "Branch",
+      "True": {
+        "Identifier": "118",
+        "Output": "Result"
+      },
+      "False": {
+        "Identifier": "76",
+        "Output": "Result"
+      },
+      "A": {},
+      "B": {},
+      "Name": "Blue Use Secondary Coord",
+      "Operator": "Equal",
+      "Enabled": false,
+      "UI": {
+        "Priority": 6,
+        "PrimaryGroup": {
+          "Name": "Blue Channel",
+          "Priority": 4
+        }
+      },
+      "Identifier": "114",
+      "Position": "-784,1008"
+    },
+    {
+      "_class": "Branch",
+      "True": {
+        "Identifier": "119",
+        "Output": "Result"
+      },
+      "False": {
+        "Identifier": "65",
+        "Output": "Result"
+      },
+      "A": {},
+      "B": {},
+      "Name": "Base Use Secondary Coord",
+      "Operator": "Equal",
+      "Enabled": false,
+      "UI": {
+        "Priority": 4,
+        "PrimaryGroup": {
+          "Name": "Base Textures",
+          "Priority": 1
+        }
+      },
+      "Identifier": "115",
+      "Position": "-2368,-576"
+    },
+    {
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": true,
+      "Tiling": "1,1",
+      "Identifier": "116",
+      "Position": "-2880,992"
+    },
+    {
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": true,
+      "Tiling": "1,1",
+      "Identifier": "117",
+      "Position": "-1888,992"
+    },
+    {
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": true,
+      "Tiling": "1,1",
+      "Identifier": "118",
+      "Position": "-976,992"
+    },
+    {
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": true,
+      "Tiling": "1,1",
+      "Identifier": "119",
+      "Position": "-2544,-592"
+    },
+    {
+      "_class": "CommentNode",
+      "Size": "720,640",
+      "Color": "Purple",
+      "Description": "",
+      "Title": "Base Material",
+      "Layer": 5,
+      "Identifier": "120",
+      "Position": "-2576,-736"
+    },
+    {
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": true,
+      "Tiling": "1,1",
+      "Identifier": "121",
+      "Position": "-2544,-592"
+    },
+    {
+      "_class": "Branch",
+      "True": {
+        "Identifier": "121",
+        "Output": "Result"
+      },
+      "False": {
+        "Identifier": "123",
+        "Output": "Result"
+      },
+      "A": {},
+      "B": {},
+      "Name": "Base Use Secondary Coord",
+      "Operator": "Equal",
+      "Enabled": false,
+      "UI": {
+        "Priority": 4,
+        "PrimaryGroup": {
+          "Name": "Base Textures",
+          "Priority": 1
+        }
+      },
+      "Identifier": "122",
+      "Position": "-2368,-576"
+    },
+    {
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": false,
+      "Tiling": "1,1",
+      "Identifier": "123",
+      "Position": "-2544,-528"
+    },
+    {
+      "_class": "TextureCoord",
+      "UseSecondaryCoord": true,
+      "Tiling": "1,1",
+      "Identifier": "124",
+      "Position": "-2688,208"
+    },
+    {
+      "_class": "Branch",
+      "True": {
+        "Identifier": "124",
+        "Output": "Result"
+      },
+      "False": {
+        "Identifier": "18",
+        "Output": "Result"
+      },
+      "A": {},
+      "B": {},
+      "Name": "Unique Use Secondary Coord",
+      "Operator": "Equal",
+      "Enabled": false,
+      "UI": {
+        "Priority": 4,
+        "PrimaryGroup": {
+          "Name": "Unique Textures"
+        }
+      },
+      "Identifier": "125",
+      "Position": "-2496,224"
     }
   ]
 }
