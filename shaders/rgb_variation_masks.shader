@@ -27,7 +27,6 @@ COMMON
 	
 	#include "common/shared.hlsl"
 	#include "procedural.hlsl"
-	#include "blendmodes.hlsl"
 
 	#define S_UV2 1
 	#define CUSTOM_MATERIAL_INPUTS
@@ -68,6 +67,7 @@ PS
 	CreateInputTexture2D( GreenAlbedo, Srgb, 8, "None", "_color", "Green Channel,3/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
 	CreateInputTexture2D( BlueAlbedo, Srgb, 8, "None", "_color", "Blue Channel,4/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
 	CreateInputTexture2D( GlobalNormal, Linear, 8, "NormalizeNormals", "_normal", "Base Textures,1/,0/2", Default4( 1.00, 1.00, 1.00, 1.00 ) );
+	CreateInputTexture2D( BakedNormal, Linear, 8, "NormalizeNormals", "_normal", "Unique Textures,0/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
 	CreateInputTexture2D( RedNormal, Linear, 8, "NormalizeNormals", "_normal", "Red Channel,2/,0/4", Default4( 1.00, 1.00, 1.00, 1.00 ) );
 	CreateInputTexture2D( GreenNormal, Linear, 8, "NormalizeNormals", "_normal", "Green Channel,3/,0/4", Default4( 1.00, 1.00, 1.00, 1.00 ) );
 	CreateInputTexture2D( BlueNormal, Linear, 8, "NormalizeNormals", "_normal", "Blue Channel,4/,0/4", Default4( 1.00, 1.00, 1.00, 1.00 ) );
@@ -81,6 +81,7 @@ PS
 	Texture2D g_tGreenAlbedo < Channel( RGBA, Box( GreenAlbedo ), Srgb ); OutputFormat( DXT5 ); SrgbRead( True ); >;
 	Texture2D g_tBlueAlbedo < Channel( RGBA, Box( BlueAlbedo ), Srgb ); OutputFormat( DXT5 ); SrgbRead( True ); >;
 	Texture2D g_tGlobalNormal < Channel( RGBA, Box( GlobalNormal ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
+	Texture2D g_tBakedNormal < Channel( RGBA, Box( BakedNormal ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
 	Texture2D g_tRedNormal < Channel( RGBA, Box( RedNormal ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
 	Texture2D g_tGreenNormal < Channel( RGBA, Box( GreenNormal ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
 	Texture2D g_tBlueNormal < Channel( RGBA, Box( BlueNormal ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
@@ -106,6 +107,7 @@ PS
 	float4 g_vBlueTint < UiType( Color ); UiGroup( "Blue Channel,4/,0/2" ); Default4( 1.00, 1.00, 1.00, 1.00 ); >;
 	float g_flBlueMaskStrength < UiGroup( "Blue Channel,4/,0/0" ); Default1( 3.076231 ); Range1( 0, 10 ); >;
 	bool g_bBlueUseAlbedo < UiGroup( "Blue Channel,4/,0/7" ); Default( 1 ); >;
+	float g_flBakedNormalBlend < UiGroup( "Unique Textures,0/,0/2" ); Default1( 0.5 ); Range1( 0, 1 ); >;
 	bool g_bRedUseNormal < UiGroup( "Red Channel,2/,0/11" ); Default( 0 ); >;
 	bool g_bGreenUseNormal < UiGroup( "Green Channel,3/,0/11" ); Default( 0 ); >;
 	bool g_bBlueUseNormal < UiGroup( "Blue Channel,4/,0/11" ); Default( 0 ); >;
@@ -118,6 +120,31 @@ PS
 	bool g_bRedUseAO < UiGroup( "Red Channel,2/,0/8" ); Default( 0 ); >;
 	bool g_bGreenUseAO < UiGroup( "Green Channel,3/,0/8" ); Default( 0 ); >;
 	bool g_bBlueUseAO < UiGroup( "Blue Channel,4/,0/8" ); Default( 0 ); >;
+		
+	float Overlay_blend( float a, float b )
+	{
+	    if ( a <= 0.5f )
+	        return 2.0f * a * b;
+	    else
+	        return 1.0f - 2.0f * ( 1.0f - a ) * ( 1.0f - b );
+	}
+	
+	float3 Overlay_blend( float3 a, float3 b )
+	{
+	    return float3(
+	        Overlay_blend( a.r, b.r ),
+	        Overlay_blend( a.g, b.g ),
+	        Overlay_blend( a.b, b.b )
+		);
+	}
+	
+	float4 Overlay_blend( float4 a, float4 b, bool blendAlpha = false )
+	{
+	    return float4(
+	        Overlay_blend( a.rgb, b.rgb ).rgb,
+	        blendAlpha ? Overlay_blend( a.a, b.a ) : max( a.a, b.a )
+	    );
+	}
 	
 	float4 MainPs( PixelInput i ) : SV_Target0
 	{
@@ -182,57 +209,60 @@ PS
 		float l_47 = g_bBlueUseAlbedo ? l_46 : 0;
 		float4 l_48 = lerp( l_35, l_43, l_47 );
 		float4 l_49 = Tex2DS( g_tGlobalNormal, g_sSampler0, l_4 );
-		float4 l_50 = Tex2DS( g_tRedNormal, g_sSampler0, l_10 );
-		float l_51 = saturate( l_19 );
-		float l_52 = g_bRedUseNormal ? l_51 : 0;
-		float4 l_53 = saturate( lerp( l_49, Overlay_blend( l_49, l_50 ), l_52 ) );
-		float4 l_54 = Tex2DS( g_tGreenNormal, g_sSampler0, l_27 );
-		float l_55 = saturate( l_32 );
-		float l_56 = g_bGreenUseNormal ? l_55 : 0;
-		float4 l_57 = saturate( lerp( l_53, Overlay_blend( l_53, l_54 ), l_56 ) );
-		float4 l_58 = Tex2DS( g_tBlueNormal, g_sSampler0, l_40 );
-		float l_59 = saturate( l_45 );
-		float l_60 = g_bBlueUseNormal ? l_59 : 0;
-		float4 l_61 = saturate( lerp( l_57, Overlay_blend( l_57, l_58 ), l_60 ) );
-		float3 l_62 = TransformNormal( i, DecodeNormal( l_61.xyz ) );
-		float4 l_63 = Tex2DS( g_tGlobalORM, g_sSampler0, l_4 );
-		float4 l_64 = Tex2DS( g_tRedORM, g_sSampler0, l_10 );
-		float l_65 = saturate( l_19 );
-		float l_66 = g_bRedUseRoughness ? l_65 : 0;
-		float l_67 = lerp( l_63.g, l_64.g, l_66 );
-		float4 l_68 = Tex2DS( g_tGreenORM, g_sSampler0, l_27 );
-		float l_69 = saturate( l_32 );
-		float l_70 = g_bGreenUseRoughness ? l_69 : 0;
-		float l_71 = lerp( l_67, l_68.g, l_70 );
-		float4 l_72 = Tex2DS( g_tBlueORM, g_sSampler0, l_40 );
-		float l_73 = saturate( l_45 );
-		float l_74 = g_bBlueUseRoughness ? l_73 : 0;
-		float l_75 = lerp( l_71, l_72.g, l_74 );
-		float l_76 = saturate( l_19 );
-		float l_77 = g_bRedUseMetallic ? l_76 : 0;
-		float l_78 = lerp( l_63.b, l_64.b, l_77 );
-		float l_79 = saturate( l_32 );
-		float l_80 = g_bGreenUseMetallic ? l_79 : 0;
-		float l_81 = lerp( l_78, l_68.b, l_80 );
-		float l_82 = saturate( l_45 );
-		float l_83 = g_bBlueUseMetallic ? l_82 : 0;
-		float l_84 = lerp( l_81, l_72.b, l_83 );
-		float l_85 = saturate( l_19 );
-		float l_86 = g_bRedUseAO ? l_85 : 0;
-		float l_87 = lerp( l_63.r, l_64.r, l_86 );
-		float l_88 = saturate( l_32 );
-		float l_89 = g_bGreenUseAO ? l_88 : 0;
-		float l_90 = lerp( l_87, l_68.r, l_89 );
-		float l_91 = saturate( l_45 );
-		float l_92 = g_bBlueUseAO ? l_91 : 0;
-		float l_93 = lerp( l_90, l_72.r, l_92 );
+		float4 l_50 = Tex2DS( g_tBakedNormal, g_sSampler0, l_16 );
+		float l_51 = g_flBakedNormalBlend;
+		float4 l_52 = saturate( lerp( l_49, Overlay_blend( l_49, l_50 ), l_51 ) );
+		float4 l_53 = Tex2DS( g_tRedNormal, g_sSampler0, l_10 );
+		float l_54 = saturate( l_19 );
+		float l_55 = g_bRedUseNormal ? l_54 : 0;
+		float4 l_56 = saturate( lerp( l_52, Overlay_blend( l_52, l_53 ), l_55 ) );
+		float4 l_57 = Tex2DS( g_tGreenNormal, g_sSampler0, l_27 );
+		float l_58 = saturate( l_32 );
+		float l_59 = g_bGreenUseNormal ? l_58 : 0;
+		float4 l_60 = saturate( lerp( l_56, Overlay_blend( l_56, l_57 ), l_59 ) );
+		float4 l_61 = Tex2DS( g_tBlueNormal, g_sSampler0, l_40 );
+		float l_62 = saturate( l_45 );
+		float l_63 = g_bBlueUseNormal ? l_62 : 0;
+		float4 l_64 = saturate( lerp( l_60, Overlay_blend( l_60, l_61 ), l_63 ) );
+		float3 l_65 = TransformNormal( i, DecodeNormal( l_64.xyz ) );
+		float4 l_66 = Tex2DS( g_tGlobalORM, g_sSampler0, l_4 );
+		float4 l_67 = Tex2DS( g_tRedORM, g_sSampler0, l_10 );
+		float l_68 = saturate( l_19 );
+		float l_69 = g_bRedUseRoughness ? l_68 : 0;
+		float l_70 = lerp( l_66.g, l_67.g, l_69 );
+		float4 l_71 = Tex2DS( g_tGreenORM, g_sSampler0, l_27 );
+		float l_72 = saturate( l_32 );
+		float l_73 = g_bGreenUseRoughness ? l_72 : 0;
+		float l_74 = lerp( l_70, l_71.g, l_73 );
+		float4 l_75 = Tex2DS( g_tBlueORM, g_sSampler0, l_40 );
+		float l_76 = saturate( l_45 );
+		float l_77 = g_bBlueUseRoughness ? l_76 : 0;
+		float l_78 = lerp( l_74, l_75.g, l_77 );
+		float l_79 = saturate( l_19 );
+		float l_80 = g_bRedUseMetallic ? l_79 : 0;
+		float l_81 = lerp( l_66.b, l_67.b, l_80 );
+		float l_82 = saturate( l_32 );
+		float l_83 = g_bGreenUseMetallic ? l_82 : 0;
+		float l_84 = lerp( l_81, l_71.b, l_83 );
+		float l_85 = saturate( l_45 );
+		float l_86 = g_bBlueUseMetallic ? l_85 : 0;
+		float l_87 = lerp( l_84, l_75.b, l_86 );
+		float l_88 = saturate( l_19 );
+		float l_89 = g_bRedUseAO ? l_88 : 0;
+		float l_90 = lerp( l_66.r, l_67.r, l_89 );
+		float l_91 = saturate( l_32 );
+		float l_92 = g_bGreenUseAO ? l_91 : 0;
+		float l_93 = lerp( l_90, l_71.r, l_92 );
+		float l_94 = saturate( l_45 );
+		float l_95 = g_bBlueUseAO ? l_94 : 0;
+		float l_96 = lerp( l_93, l_75.r, l_95 );
 		
 		m.Albedo = l_48.xyz;
 		m.Opacity = 1;
-		m.Normal = l_62;
-		m.Roughness = l_75;
-		m.Metalness = l_84;
-		m.AmbientOcclusion = l_93;
+		m.Normal = l_65;
+		m.Roughness = l_78;
+		m.Metalness = l_87;
+		m.AmbientOcclusion = l_96;
 		
 		m.AmbientOcclusion = saturate( m.AmbientOcclusion );
 		m.Roughness = saturate( m.Roughness );

@@ -41,7 +41,7 @@
         "Identifier": "125",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "RGB Variation Mask",
@@ -54,7 +54,7 @@
         "CreateInput": "CreateInputTexture2D"
       },
       "Identifier": "1",
-      "Position": "-2320,224"
+      "Position": "-2320,32"
     },
     {
       "_class": "Lerp",
@@ -80,7 +80,7 @@
         "Identifier": "70",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Green Albedo",
@@ -120,7 +120,7 @@
         "Identifier": "66",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Global Normal",
@@ -144,7 +144,7 @@
         "Identifier": "68",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Red Albedo",
@@ -166,7 +166,7 @@
         "Identifier": "66",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Global Albedo",
@@ -187,7 +187,7 @@
         "Identifier": "74",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Blue Albedo",
@@ -296,13 +296,13 @@
     },
     {
       "_class": "CommentNode",
-      "Size": "576,272",
+      "Size": "576,464",
       "Color": "White",
       "Description": "",
       "Title": "Unique Textures",
       "Layer": 6,
       "Identifier": "15",
-      "Position": "-2704,160"
+      "Position": "-2704,-48"
     },
     {
       "_class": "CommentNode",
@@ -329,7 +329,7 @@
       "UseSecondaryCoord": false,
       "Tiling": "1,1",
       "Identifier": "18",
-      "Position": "-2688,272"
+      "Position": "-2688,80"
     },
     {
       "_class": "Multiply",
@@ -467,7 +467,7 @@
         "Identifier": "66",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Global ORM",
@@ -570,7 +570,7 @@
         "Identifier": "68",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Red ORM",
@@ -592,7 +592,7 @@
         "Identifier": "70",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Green ORM",
@@ -614,7 +614,7 @@
         "Identifier": "74",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Blue ORM",
@@ -735,7 +735,7 @@
         "Identifier": "74",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Blue Normal",
@@ -798,7 +798,7 @@
         "Identifier": "68",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Red Normal",
@@ -822,7 +822,7 @@
         "Identifier": "70",
         "Output": "Result"
       },
-      "Texture": null,
+      "Image": "materials/dev/white_color.tga",
       "Sampler": {},
       "UI": {
         "Name": "Green Normal",
@@ -954,7 +954,7 @@
     {
       "_class": "Blend",
       "A": {
-        "Identifier": "5",
+        "Identifier": "127",
         "Output": "Result"
       },
       "B": {
@@ -1991,7 +1991,7 @@
       "UseSecondaryCoord": true,
       "Tiling": "1,1",
       "Identifier": "124",
-      "Position": "-2688,208"
+      "Position": "-2688,-0"
     },
     {
       "_class": "Branch",
@@ -2015,7 +2015,66 @@
         }
       },
       "Identifier": "125",
-      "Position": "-2496,224"
+      "Position": "-2496,32"
+    },
+    {
+      "_class": "TextureSampler",
+      "Coords": {
+        "Identifier": "125",
+        "Output": "Result"
+      },
+      "Image": "materials/dev/white_color.tga",
+      "Sampler": {},
+      "UI": {
+        "Name": "Baked Normal",
+        "Default": "1,1,1,1",
+        "Extension": "Normal",
+        "Processor": "NormalizeNormals",
+        "ColorSpace": "Linear",
+        "Priority": 1,
+        "PrimaryGroup": {
+          "Name": "Unique Textures"
+        },
+        "CreateInput": "CreateInputTexture2D"
+      },
+      "Identifier": "126",
+      "Position": "-2320,224"
+    },
+    {
+      "_class": "Blend",
+      "A": {
+        "Identifier": "5",
+        "Output": "Result"
+      },
+      "B": {
+        "Identifier": "126",
+        "Output": "Result"
+      },
+      "C": {
+        "Identifier": "128",
+        "Output": "Result"
+      },
+      "Fraction": 0.5,
+      "BlendMode": "Overlay",
+      "Clamp": true,
+      "Identifier": "127",
+      "Position": "-1600,-16"
+    },
+    {
+      "_class": "Float",
+      "Min": 0,
+      "Max": 1,
+      "Value": 0.5,
+      "Name": "Baked Normal Blend",
+      "IsAttribute": false,
+      "UI": {
+        "Priority": 2,
+        "PrimaryGroup": {
+          "Name": "Unique Textures"
+        }
+      },
+      "Identifier": "128",
+      "Position": "-1920,32"
     }
   ]
 }
