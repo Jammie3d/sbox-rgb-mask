@@ -1,11 +1,12 @@
 {
   "publish": {
+    "Allowed": true,
     "Enabled": true,
     "ProjectConfig": {
       "Title": "RGB Variation Masks",
       "Type": "shader",
       "Org": "jammie",
-      "Ident": "rgb_variation_masks",
+      "Ident": "rgb_masks",
       "Tags": "shader rgb blend environment packed detail",
       "Schema": 0,
       "HasAssets": false,

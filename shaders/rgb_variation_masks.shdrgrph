@@ -407,7 +407,7 @@
       "_class": "Float",
       "Min": 0,
       "Max": 10,
-      "Value": 3.076231,
+      "Value": 1,
       "Name": "Blue Mask Strength",
       "IsAttribute": false,
       "UI": {
@@ -1398,7 +1398,7 @@
       "B": {},
       "Name": "Red Use Albedo",
       "Operator": "Equal",
-      "Enabled": true,
+      "Enabled": false,
       "UI": {
         "Priority": 7,
         "PrimaryGroup": {
@@ -1598,7 +1598,7 @@
       "B": {},
       "Name": "Green Use Albedo",
       "Operator": "Equal",
-      "Enabled": true,
+      "Enabled": false,
       "UI": {
         "Priority": 7,
         "PrimaryGroup": {
@@ -1798,7 +1798,7 @@
       "B": {},
       "Name": "Blue Use Albedo",
       "Operator": "Equal",
-      "Enabled": true,
+      "Enabled": false,
       "UI": {
         "Priority": 7,
         "PrimaryGroup": {
@@ -1991,7 +1991,7 @@
       "UseSecondaryCoord": true,
       "Tiling": "1,1",
       "Identifier": "124",
-      "Position": "-2688,-0"
+      "Position": "-2688,0"
     },
     {
       "_class": "Branch",
