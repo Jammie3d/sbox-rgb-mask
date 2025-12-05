@@ -11,9 +11,9 @@ FEATURES
 
 MODES
 {
-	VrForward();
-	Depth(); 
-	ToolsVis( S_MODE_TOOLS_VIS );
+	Forward();
+	Depth();
+	ToolsShadingComplexity( "tools_shading_complexity.shader" );
 }
 
 COMMON
@@ -29,18 +29,25 @@ COMMON
 	#include "procedural.hlsl"
 
 	#define S_UV2 1
-	#define CUSTOM_MATERIAL_INPUTS
 }
 
 struct VertexInput
 {
 	#include "common/vertexinput.hlsl"
+	float4 vColor : COLOR0 < Semantic( Color ); >;
 };
 
 struct PixelInput
 {
 	#include "common/pixelinput.hlsl"
 	float3 vPositionOs : TEXCOORD14;
+	float3 vNormalOs : TEXCOORD15;
+	float4 vTangentUOs_flTangentVSign : TANGENT	< Semantic( TangentU_SignV ); >;
+	float4 vColor : COLOR0;
+	float4 vTintColor : COLOR1;
+	#if ( PROGRAM == VFX_PROGRAM_PS )
+		bool vFrontFacing : SV_IsFrontFace;
+	#endif
 };
 
 VS
@@ -49,32 +56,40 @@ VS
 
 	PixelInput MainVs( VertexInput v )
 	{
+		
 		PixelInput i = ProcessVertex( v );
 		i.vPositionOs = v.vPositionOs.xyz;
-
+		i.vColor = v.vColor;
+		
+		ExtraShaderData_t extraShaderData = GetExtraPerInstanceShaderData( v.nInstanceTransformID );
+		i.vTintColor = extraShaderData.vTint;
+		
+		VS_DecodeObjectSpaceNormalAndTangent( v, i.vNormalOs, i.vTangentUOs_flTangentVSign );
 		return FinalizeVertex( i );
+		
 	}
 }
 
 PS
 {
 	#include "common/pixel.hlsl"
-	
+	RenderState( CullMode, F_RENDER_BACKFACES ? NONE : DEFAULT );
+		
 	SamplerState g_sSampler0 < Filter( ANISO ); AddressU( WRAP ); AddressV( WRAP ); >;
-	CreateInputTexture2D( GlobalAlbedo, Srgb, 8, "None", "_color", "Base Textures,1/,0/0", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( RedAlbedo, Srgb, 8, "None", "_color", "Red Channel,2/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( RGBVariationMask, Linear, 8, "None", "_mask", "Unique Textures,0/,0/0", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( GreenAlbedo, Srgb, 8, "None", "_color", "Green Channel,3/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( BlueAlbedo, Srgb, 8, "None", "_color", "Blue Channel,4/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( GlobalNormal, Linear, 8, "NormalizeNormals", "_normal", "Base Textures,1/,0/2", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( BakedNormal, Linear, 8, "NormalizeNormals", "_normal", "Unique Textures,0/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( RedNormal, Linear, 8, "NormalizeNormals", "_normal", "Red Channel,2/,0/4", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( GreenNormal, Linear, 8, "NormalizeNormals", "_normal", "Green Channel,3/,0/4", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( BlueNormal, Linear, 8, "NormalizeNormals", "_normal", "Blue Channel,4/,0/4", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( GlobalORM, Linear, 8, "None", "_color", "Base Textures,1/,0/1", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( RedORM, Linear, 8, "None", "_color", "Red Channel,2/,0/3", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( GreenORM, Linear, 8, "None", "_color", "Green Channel,3/,0/3", Default4( 1.00, 1.00, 1.00, 1.00 ) );
-	CreateInputTexture2D( BlueORM, Linear, 8, "None", "_color", "Blue Channel,4/,0/3", Default4( 1.00, 1.00, 1.00, 1.00 ) );
+	CreateInputTexture2D( GlobalAlbedo, Srgb, 8, "None", "_color", "Base Textures,1/,0/0", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( RedAlbedo, Srgb, 8, "None", "_color", "Red Channel,2/,0/1", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( RGBVariationMask, Linear, 8, "None", "_mask", "Unique Textures,0/,0/0", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( GreenAlbedo, Srgb, 8, "None", "_color", "Green Channel,3/,0/1", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( BlueAlbedo, Srgb, 8, "None", "_color", "Blue Channel,4/,0/1", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( GlobalNormal, Linear, 8, "NormalizeNormals", "_normal", "Base Textures,1/,0/2", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( BakedNormal, Linear, 8, "NormalizeNormals", "_normal", "Unique Textures,0/,0/1", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( RedNormal, Linear, 8, "NormalizeNormals", "_normal", "Red Channel,2/,0/4", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( GreenNormal, Linear, 8, "NormalizeNormals", "_normal", "Green Channel,3/,0/4", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( BlueNormal, Linear, 8, "NormalizeNormals", "_normal", "Blue Channel,4/,0/4", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( GlobalORM, Linear, 8, "None", "_color", "Base Textures,1/,0/1", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( RedORM, Linear, 8, "None", "_color", "Red Channel,2/,0/3", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( GreenORM, Linear, 8, "None", "_color", "Green Channel,3/,0/3", DefaultFile( "materials/dev/white_color.tga" ) );
+	CreateInputTexture2D( BlueORM, Linear, 8, "None", "_color", "Blue Channel,4/,0/3", DefaultFile( "materials/dev/white_color.tga" ) );
 	Texture2D g_tGlobalAlbedo < Channel( RGBA, Box( GlobalAlbedo ), Srgb ); OutputFormat( DXT5 ); SrgbRead( True ); >;
 	Texture2D g_tRedAlbedo < Channel( RGBA, Box( RedAlbedo ), Srgb ); OutputFormat( DXT5 ); SrgbRead( True ); >;
 	Texture2D g_tRGBVariationMask < Channel( RGBA, Box( RGBVariationMask ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
@@ -89,37 +104,39 @@ PS
 	Texture2D g_tRedORM < Channel( RGBA, Box( RedORM ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
 	Texture2D g_tGreenORM < Channel( RGBA, Box( GreenORM ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
 	Texture2D g_tBlueORM < Channel( RGBA, Box( BlueORM ), Linear ); OutputFormat( DXT5 ); SrgbRead( False ); >;
-	bool g_bBaseUseSecondaryCoord < UiGroup( "Base Textures,1/,0/4" ); Default( 0 ); >;
-	float2 g_vBaseTiling < UiGroup( "Base Textures,1/,0/3" ); Default2( 1,1 ); >;
-	bool g_bRedUseSecondaryCoord < UiGroup( "Red Channel,2/,0/6" ); Default( 0 ); >;
-	float2 g_vRedTiling < UiGroup( "Red Channel,2/,0/5" ); Default2( 1,1 ); >;
+	TextureAttribute( LightSim_DiffuseAlbedoTexture, g_tBlueAlbedo )
+	TextureAttribute( RepresentativeTexture, g_tBlueAlbedo )
+	bool g_bBaseUseSecondaryCoord < Attribute( "Base Use Secondary Coord" ); Default( 0 ); >;
+	float2 g_vBaseTiling < UiGroup( "Base Textures,1/,0/3" ); Default2( 1,1 ); Range2( 0,0, 1,1 ); >;
+	bool g_bRedUseSecondaryCoord < Attribute( "Red Use Secondary Coord" ); Default( 0 ); >;
+	float2 g_vRedTiling < UiGroup( "Red Channel,2/,0/5" ); Default2( 1,1 ); Range2( 0,0, 1,1 ); >;
 	float4 g_vRedTint < UiType( Color ); UiGroup( "Red Channel,2/,0/2" ); Default4( 1.00, 1.00, 1.00, 1.00 ); >;
-	bool g_bUniqueUseSecondaryCoord < UiGroup( "Unique Textures,0/,0/4" ); Default( 0 ); >;
+	bool g_bUniqueUseSecondaryCoord < Attribute( "Unique Use Secondary Coord" ); Default( 0 ); >;
 	float g_flRedMaskStrength < UiGroup( "Red Channel,2/,0/0" ); Default1( 1 ); Range1( 0, 10 ); >;
-	bool g_bRedUseAlbedo < UiGroup( "Red Channel,2/,0/7" ); Default( 0 ); >;
-	bool g_bGreenUseSecondaryCoord < UiGroup( "Green Channel,3/,0/6" ); Default( 0 ); >;
-	float2 g_vGreenTiling < UiGroup( "Green Channel,3/,0/5" ); Default2( 1,1 ); >;
+	bool g_bRedUseAlbedo < Attribute( "Red Use Albedo" ); Default( 0 ); >;
+	bool g_bGreenUseSecondaryCoord < Attribute( "Green Use Secondary Coord" ); Default( 0 ); >;
+	float2 g_vGreenTiling < UiGroup( "Green Channel,3/,0/5" ); Default2( 1,1 ); Range2( 0,0, 1,1 ); >;
 	float4 g_vGreenTint < UiType( Color ); UiGroup( "Green Channel,3/,0/2" ); Default4( 1.00, 1.00, 1.00, 1.00 ); >;
 	float g_flGreenMaskStrength < UiGroup( "Green Channel,3/,0/0" ); Default1( 1 ); Range1( 0, 10 ); >;
-	bool g_bGreenUseAlbedo < UiGroup( "Green Channel,3/,0/7" ); Default( 0 ); >;
-	bool g_bBlueUseSecondaryCoord < UiGroup( "Blue Channel,4/,0/6" ); Default( 0 ); >;
-	float2 g_vBlueTiling < UiGroup( "Blue Channel,4/,0/5" ); Default2( 1,1 ); >;
+	bool g_bGreenUseAlbedo < Attribute( "Green Use Albedo" ); Default( 0 ); >;
+	bool g_bBlueUseSecondaryCoord < Attribute( "Blue Use Secondary Coord" ); Default( 0 ); >;
+	float2 g_vBlueTiling < UiGroup( "Blue Channel,4/,0/5" ); Default2( 1,1 ); Range2( 0,0, 1,1 ); >;
 	float4 g_vBlueTint < UiType( Color ); UiGroup( "Blue Channel,4/,0/2" ); Default4( 1.00, 1.00, 1.00, 1.00 ); >;
 	float g_flBlueMaskStrength < UiGroup( "Blue Channel,4/,0/0" ); Default1( 1 ); Range1( 0, 10 ); >;
-	bool g_bBlueUseAlbedo < UiGroup( "Blue Channel,4/,0/7" ); Default( 0 ); >;
+	bool g_bBlueUseAlbedo < Attribute( "Blue Use Albedo" ); Default( 0 ); >;
 	float g_flBakedNormalBlend < UiGroup( "Unique Textures,0/,0/2" ); Default1( 0.5 ); Range1( 0, 1 ); >;
-	bool g_bRedUseNormal < UiGroup( "Red Channel,2/,0/11" ); Default( 0 ); >;
-	bool g_bGreenUseNormal < UiGroup( "Green Channel,3/,0/11" ); Default( 0 ); >;
-	bool g_bBlueUseNormal < UiGroup( "Blue Channel,4/,0/11" ); Default( 0 ); >;
-	bool g_bRedUseRoughness < UiGroup( "Red Channel,2/,0/9" ); Default( 0 ); >;
-	bool g_bGreenUseRoughness < UiGroup( "Green Channel,3/,0/9" ); Default( 0 ); >;
-	bool g_bBlueUseRoughness < UiGroup( "Blue Channel,4/,0/9" ); Default( 0 ); >;
-	bool g_bRedUseMetallic < UiGroup( "Red Channel,2/,0/10" ); Default( 0 ); >;
-	bool g_bGreenUseMetallic < UiGroup( "Green Channel,3/,0/10" ); Default( 0 ); >;
-	bool g_bBlueUseMetallic < UiGroup( "Blue Channel,4/,0/10" ); Default( 0 ); >;
-	bool g_bRedUseAO < UiGroup( "Red Channel,2/,0/8" ); Default( 0 ); >;
-	bool g_bGreenUseAO < UiGroup( "Green Channel,3/,0/8" ); Default( 0 ); >;
-	bool g_bBlueUseAO < UiGroup( "Blue Channel,4/,0/8" ); Default( 0 ); >;
+	bool g_bRedUseNormal < Attribute( "Red Use Normal" ); Default( 0 ); >;
+	bool g_bGreenUseNormal < Attribute( "Green Use Normal" ); Default( 0 ); >;
+	bool g_bBlueUseNormal < Attribute( "Blue Use Normal" ); Default( 0 ); >;
+	bool g_bRedUseRoughness < Attribute( "Red Use Roughness" ); Default( 0 ); >;
+	bool g_bGreenUseRoughness < Attribute( "Green Use Roughness" ); Default( 0 ); >;
+	bool g_bBlueUseRoughness < Attribute( "Blue Use Roughness" ); Default( 0 ); >;
+	bool g_bRedUseMetallic < Attribute( "Red Use Metallic" ); Default( 0 ); >;
+	bool g_bGreenUseMetallic < Attribute( "Green Use Metallic" ); Default( 0 ); >;
+	bool g_bBlueUseMetallic < Attribute( "Blue Use Metallic" ); Default( 0 ); >;
+	bool g_bRedUseAO < Attribute( "Red Use AO" ); Default( 0 ); >;
+	bool g_bGreenUseAO < Attribute( "Green Use AO" ); Default( 0 ); >;
+	bool g_bBlueUseAO < Attribute( "Blue Use AO" ); Default( 0 ); >;
 		
 	float Overlay_blend( float a, float b )
 	{
@@ -148,9 +165,10 @@ PS
 	
 	float4 MainPs( PixelInput i ) : SV_Target0
 	{
-		Material m;
+		
+		Material m = Material::Init( i );
 		m.Albedo = float3( 1, 1, 1 );
-		m.Normal = TransformNormal( i, float3( 0, 0, 1 ) );
+		m.Normal = float3( 0, 0, 1 );
 		m.Roughness = 1;
 		m.Metalness = 0;
 		m.AmbientOcclusion = 1;
@@ -224,7 +242,7 @@ PS
 		float l_62 = saturate( l_45 );
 		float l_63 = g_bBlueUseNormal ? l_62 : 0;
 		float4 l_64 = saturate( lerp( l_60, Overlay_blend( l_60, l_61 ), l_63 ) );
-		float3 l_65 = TransformNormal( i, DecodeNormal( l_64.xyz ) );
+		float3 l_65 = DecodeNormal( l_64.xyz );
 		float4 l_66 = Tex2DS( g_tGlobalORM, g_sSampler0, l_4 );
 		float4 l_67 = Tex2DS( g_tRedORM, g_sSampler0, l_10 );
 		float l_68 = saturate( l_19 );
@@ -264,11 +282,20 @@ PS
 		m.Metalness = l_87;
 		m.AmbientOcclusion = l_96;
 		
+		
 		m.AmbientOcclusion = saturate( m.AmbientOcclusion );
 		m.Roughness = saturate( m.Roughness );
 		m.Metalness = saturate( m.Metalness );
 		m.Opacity = saturate( m.Opacity );
 		
-		return ShadingModelStandard::Shade( i, m );
+		// Result node takes normal as tangent space, convert it to world space now
+		m.Normal = TransformNormal( m.Normal, i.vNormalWs, i.vTangentUWs, i.vTangentVWs );
+		
+		// for some toolvis shit
+		m.WorldTangentU = i.vTangentUWs;
+		m.WorldTangentV = i.vTangentVWs;
+		m.TextureCoords = i.vTextureCoords.xy;
+				
+		return ShadingModelStandard::Shade( m );
 	}
 }
